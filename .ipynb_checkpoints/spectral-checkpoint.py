@@ -20,15 +20,16 @@ def spectral_type(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, path='
     lower_teff_index = ((mamajek_df['Teff'] - (teff-teff_unc)).abs()).idxmin()
     upper_teff_index = ((mamajek_df['Teff'] - (teff+teff_unc)).abs()).idxmin()
 
-    if filter == "K" or filter == "Ks" or filter == "Kcont" or filter == "Brgamma":
+    if filter in ["K", "Ks", "Kcont", "Brgamma"]:
         filter_output = "M_Ks"
-    elif filter == "H" or filter == "Hcont":
+    elif filter in ["H", "Hcont"]:
         filter_output = "M_H"
     else:
         filter_output = f"M_{filter}"
         
     if filter_output not in mamajek_df.columns:
-        return "ERROR: attempted to reference unsupported magnitude - could not run analysis"
+        # return f"ERROR: attempted to reference unsupported magnitude '{filter}' - could not run analysis"
+        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
     
     
     primary_spt = mamajek_df.loc[teff_index, 'SpT']

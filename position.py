@@ -1,5 +1,12 @@
 import argparse
 import numpy as np
+import sys
+
+class CustomArgumentParser(argparse.ArgumentParser):
+    def error(self, message):
+        # Print custom error message (without usage)
+        print(f"ERROR: {message}")
+        sys.exit(2)
 
 def position(pixscale, p_x, p_y, c_x, c_y):
 	sep_delta_x = abs(p_x - c_x)
@@ -26,7 +33,7 @@ def position(pixscale, p_x, p_y, c_x, c_y):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = CustomArgumentParser()
     parser.add_argument("--s", required=True, type=float, help="Pixel scale")
     parser.add_argument("p_x", type=float, help="Centroid X coordinate of the primary star")
     parser.add_argument("p_y", type=float, help="Centroid Y coordinate of the primary star")

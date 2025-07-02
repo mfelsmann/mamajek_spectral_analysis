@@ -1,0 +1,4 @@
+5493.0|140.6
+ERROR on line 2: No matching target entry found in database
+3443.0|157.0
+5955.0|133.0

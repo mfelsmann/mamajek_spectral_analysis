@@ -37,6 +37,17 @@ def all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc
     if mamajek_df is None:
         from spectral import load_mamajek_from_file
         mamajek_df = load_mamajek_from_file()
+
+    if filter in ["K", "Ks", "Kcont", "Brgamma"]:
+        filter_output = "M_Ks"
+    elif filter in ["H", "Hcont"]:
+        filter_output = "M_H"
+    else:
+        filter_output = f"M_{filter}"
+
+    if filter_output not in mamajek_df.columns:
+        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        
     pos_data = position(pixscale, p_x, p_y, c_x, c_y)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)

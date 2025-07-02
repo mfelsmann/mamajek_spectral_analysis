@@ -9,14 +9,14 @@ import os
 from datetime import datetime
 import re
 
-def valid_date(s):
-    try:
-        return datetime.strptime(s, "%Y-%m-%d").date()
-    except ValueError:
-        tag = s
-        print(tag)
-        msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
-        raise argparse.ArgumentTypeError(msg)
+# def valid_date(s):
+#     try:
+#         return datetime.strptime(s, "%Y-%m-%d").date()
+#     except ValueError:
+#         tag = s
+#         print(tag)
+#         msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
+#         raise argparse.ArgumentTypeError(msg)
 
 def parse_obs_date_and_data_tag(obs_raw, tag_raw):
     obs_date = None
@@ -25,10 +25,18 @@ def parse_obs_date_and_data_tag(obs_raw, tag_raw):
     # If both were passed correctly
     if obs_raw and tag_raw:
         try:
+            # First validate the format with regex
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", obs_raw):
+                raise ValueError(f"Invalid date format '{obs_raw}'. Expected format is YYYY-MM-DD.")
+            
+            # Now parse the actual date
             obs_date = datetime.strptime(obs_raw, "%Y-%m-%d").date()
             data_tag = int(tag_raw)
-        except ValueError:
-            raise ValueError(f"Invalid obs_date '{obs_raw}'. Expected format YYYY-MM-DD.")
+        except ValueError as e:
+            if "does not match format" in str(e):
+                raise ValueError(f"Invalid date format '{obs_raw}'. Expected format is YYYY-MM-DD.")
+            else:
+                raise ValueError(f"Invalid calendar date '{obs_raw}'. This date does not exist.")
     
     # If only one is provided, try to detect which it is
     elif obs_raw and not tag_raw:
@@ -68,18 +76,39 @@ def get_all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c
     # if mamajek_df is None:
     #     from spectral import load_mamajek_from_file
     #     mamajek_df = load_mamajek_from_file()
+    if exo_df is None:
+        from teff import load_exo_df_from_file
+        exo_df = load_exo_df_from_file()
+    if mamajek_df is None:
+        from spectral import load_mamajek_from_file
+        mamajek_df = load_mamajek_from_file()
+        
+    if filter in ["K", "Ks", "Kcont", "Brgamma"]:
+        filter_output = "M_Ks"
+    elif filter in ["H", "Hcont"]:
+        filter_output = "M_H"
+    else:
+        filter_output = f"M_{filter}"
+
+    # if filter_output not in mamajek_df.columns:
+    #     raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        
     pos_data = position(pixscale, p_x, p_y, c_x, c_y)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)
     if type(obs_date) == str and len(obs_date) == 10:
         if re.fullmatch(r"\d{4}-\d{2}-\d{2}", obs_date):
-            obs_date = obs_date
+            try:
+                # Try converting to a real date to catch values like 2023-02-30
+                datetime.strptime(obs_date, "%Y-%m-%d")
+            except ValueError:
+                return f"ERROR: Invalid calendar date '{obs_date}'."
         elif not re.fullmatch(r"\d{4}-\d{2}-\d{2}", obs_date):
-            return "ERROR: You may have provided a date in MM-DD-YYYY or DD-MM-YYYY format. Please ensure your date is in YYYY-MM-DD format"
+            return "ERROR: You may have provided a date in MM-DD-YYYY or DD-MM-YYYY format. Please ensure your date is in YYYY-MM-DD format."
     if type(obs_date) == str and len(obs_date) != 10:
-        return "ERROR: Please ensure your date is in YYYY-MM-DD format, using hyphens and leading zeroes if necessary—i.e., March is 03"
+        return "ERROR: Please ensure your date is in YYYY-MM-DD format, using hyphens and leading zeroes if necessary—i.e., March is 03."
     if type(obs_date) == int and data_tag is not None:
-        return "ERROR: Please ensure your date is provided as a string using YYYY-MM-DD format"
+        return "ERROR: Please ensure your date is provided as a string using YYYY-MM-DD format."
     if type(obs_date) == int and data_tag is None:
         if len(str(obs_date)) < 8:
             print(f"Interpreting {obs_date} as data tag.")
@@ -105,19 +134,19 @@ def get_all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c
         'position_angle': pos_data["position_angle"], 
         'pa_uncertainty': pos_data["pa_uncertainty"],
         'filter_name': filter,
-        'filtercent': '',
-        'filterwidth': '',
-        'finterunits': '',
+        # 'filtercent': '',
+        # 'filterwidth': '',
+        # 'finterunits': '',
         'delta_magnitude': mag_data["d_mag"],
         'd_mag_uncertainty': mag_data["dm_unc"],
-        'obsdate': obs_date if isinstance(obs_date, str) else (obs_date.isoformat() if obs_date else None),
-        'tag': data_tag,
-        'group': f"tfopwg",
-        'prop_period': 0,
+        # 'group': f"tfopwg",
+        # 'prop_period': 0,
         'primary_spt': spt_data["primary_spt"],
         'companion_spt': spt_data["comp_spt"],
         'teff': temp_data["teff"],
-        'teff_uncertainty': temp_data["unc"]
+        'teff_uncertainty': temp_data["unc"],
+        'obsdate': obs_date if isinstance(obs_date, str) else (obs_date.isoformat() if obs_date else None),
+        'tag': data_tag,
     }
 
 if __name__ == "__main__":

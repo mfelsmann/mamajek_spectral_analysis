@@ -20,15 +20,15 @@ def spectral_type_file(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, p
     lower_teff_index = ((mamajek_df['Teff'] - (teff-teff_unc)).abs()).idxmin()
     upper_teff_index = ((mamajek_df['Teff'] - (teff+teff_unc)).abs()).idxmin()
 
-    if filter == "K" or filter == "Ks" or filter == "Kcont":
+    if filter in ["K", "Ks", "Kcont", "Brgamma"]:
         filter_output = "M_Ks"
-    elif filter == "H" or filter == "Hcont":
+    elif filter in ["H", "Hcont"]:
         filter_output = "M_H"
     else:
         filter_output = f"M_{filter}"
 
     if filter_output not in mamajek_df.columns:
-        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis - spectral file")
     
     
     primary_spt = mamajek_df.loc[teff_index, 'SpT']
@@ -124,10 +124,10 @@ if __name__ == "__main__":
     parser.add_argument("input_file", help="Path to input file with parameters")
     parser.add_argument("output_file", help="Path to output file to save results")
     args = parser.parse_args()
-    if not os.path.exists("mamajek.csv"):
-        dl_mamajek(save_path="mamajek.csv")
-        # print('Downloaded and saved mamajek.csv to cwd')
-    mamajek_df = load_mamajek_from_file()
+    # if not os.path.exists("mamajek.csv"):
+    #     dl_mamajek(save_path="mamajek.csv")
+    #     # print('Downloaded and saved mamajek.csv to cwd')
+    # mamajek_df = load_mamajek_from_file()
 
-    spectral_file(args.input_file, args.output_file, mamajek_df)
+    spectral_file(args.input_file, args.output_file)
 
