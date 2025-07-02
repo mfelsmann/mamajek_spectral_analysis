@@ -9,12 +9,12 @@ import os
 import re
 from datetime import datetime
 
-def valid_date_file(s):
-    try:
-        return datetime.strptime(s, "%Y-%m-%d").date()
-    except ValueError:
-        msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
-        raise argparse.ArgumentTypeError(msg)
+# def valid_date_file(s):
+#     try:
+#         return datetime.strptime(s, "%Y-%m-%d").date()
+#     except ValueError:
+#         msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
+#         raise argparse.ArgumentTypeError(msg)
 
 def all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, obs_date, data_tag, exo_df=None, mamajek_df=None):
     obs_date = obs_date.strip()

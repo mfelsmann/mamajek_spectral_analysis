@@ -78,6 +78,21 @@ def spectral_file(input_file, output_file, mamajek_df=None, path='mamajek.csv'):
         mamajek_df = load_mamajek_from_file(path)
 
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        headers = [
+            "primary_spt",
+            "primary_spt_lower",
+            "primary_spt_upper",
+            "primary_mag",
+            "primary_mag_lower",
+            "primary_mag_upper",
+            "comp_spt",
+            "comp_spt_lower",
+            "comp_spt_upper",
+            "comp_mag",
+            "comp_mag_lower",
+            "comp_mag_upper"
+        ]
+        outfile.write('|'.join(headers) + '\n')
         for line_number, line in enumerate(infile, start=1):
             parts = line.strip().split(',')
             

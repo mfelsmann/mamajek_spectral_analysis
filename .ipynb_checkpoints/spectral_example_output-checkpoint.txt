@@ -1,0 +1,3 @@
+F7V|F8V|F6V|2.639|2.821|2.557|M6V|M6.5V|M6V|9.572|9.86|9.572
+ERROR on line 2: Attempted to reference unsupported magnitude 'X' - could not run analysis - spectral file
+K2V|K2V|K1V|3.938|3.938|3.889|M1V|M1V|M1V|5.64|5.64|5.64
