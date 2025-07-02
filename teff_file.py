@@ -35,6 +35,11 @@ def get_teff_file(id_tag, exo_df=None, path='exofop.csv'):
 
 def teff_file(input_file, output_file, exo_df=None, path='exofop.csv'):
     with open(input_file, 'r') as infile, open(output_file, 'w') as outfile:
+        headers = [
+            "effective_temperature",
+            "teff_uncertainty"
+        ]
+        outfile.write('|'.join(headers) + '\n')
         for line_number, line in enumerate(infile, start=1):
             try: 
                 tag = float(line.strip())

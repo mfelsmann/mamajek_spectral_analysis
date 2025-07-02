@@ -1,2 +1,0 @@
-F7V|F8V|F6V|2.579|2.76|2.5|M7V|M7.5V|M6.5V|9.7|9.81|9.5
-ERROR: attempted to reference unsupported magnitude - could not run analysis|||||||||||
