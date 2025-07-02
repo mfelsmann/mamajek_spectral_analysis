@@ -1,0 +1,6 @@
+3588|1.141|0.008|27.307|0.18|Hcont||||4.438|0.022|2024-07-27|442062|tfopwg|0|Primary spectral type: F4V; companion spectral type: M3V
+3588|1.149|0.008|27.528|0.179|Kcont||||4.255|0.028|2024-07-27|442062|tfopwg|0|Primary spectral type: F4V; companion spectral type: M3V
+5689|1.021|0.007|147.496|0.202|Hcont||||3.172|0.014|2024-07-27|442065|tfopwg|0|Primary spectral type: G2V; companion spectral type: M2.5V
+5689|1.017|0.007|147.858|0.202|Kcont||||2.98|0.028|2024-07-27|442065|tfopwg|0|Primary spectral type: G2V; companion spectral type: M2.5V
+5806|2.132|0.015|23.45|0.097|Hcont||||2.066|0.006|2024-08-08|442101|tfopwg|0|Primary spectral type: F5V; companion spectral type: K4V
+5806|2.13|0.015|23.324|0.097|Kcont||||2.018|0.007|2024-08-08|442101|tfopwg|0|Primary spectral type: F5V; companion spectral type: K4V

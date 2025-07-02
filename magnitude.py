@@ -8,6 +8,7 @@ def magnitude(p_mag, pm_unc, c_mag, cm_unc):
     dm_unc_round = round(dm_unc, 3)
 
     return {
+        "dmag": d_mag,
         "d_mag": dm_round,
         "dm_unc": dm_unc_round
     }

@@ -10,10 +10,14 @@ import re
 from datetime import datetime
 
 def valid_date_file(s):
+    # First check the format manually
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", s):
+        msg = f"Not a valid date format: '{s}'. Expected format: YYYY-MM-DD"
+        raise argparse.ArgumentTypeError(msg)
     try:
         return datetime.strptime(s, "%Y-%m-%d").date()
     except ValueError:
-        msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
+        msg = f"Invalid calendar date: '{s}'. Please check the day/month values."
         raise argparse.ArgumentTypeError(msg)
 
 def all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, obs_date, data_tag, exo_df=None, mamajek_df=None):
@@ -37,6 +41,17 @@ def all(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc
     if mamajek_df is None:
         from spectral import load_mamajek_from_file
         mamajek_df = load_mamajek_from_file()
+
+    if filter in ["K", "Ks", "Kcont", "Brgamma"]:
+        filter_output = "M_Ks"
+    elif filter in ["H", "Hcont"]:
+        filter_output = "M_H"
+    else:
+        filter_output = f"M_{filter}"
+
+    if filter_output not in mamajek_df.columns:
+        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        
     pos_data = position(pixscale, p_x, p_y, c_x, c_y)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)
