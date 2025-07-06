@@ -1,0 +1,9 @@
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+ERROR on line 2: No matching target entry found in database
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|255.615|0.097|Primary spectral type: F4V|Companion spectral type: M8V
+ERROR on line 9: Attempted to reference unsupported magnitude 'X' - could not run analysis

@@ -1,0 +1,6 @@
+target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
+3588|2.127|0.015|255.615|0.097|Kcont|7.8|0.165|Primary spectral type: F4V|Companion spectral type: M8V
+ERROR on line 2: No matching target entry found in database
+3588|2.127|0.015|255.615|0.097|Kcont|7.8|0.165|Primary spectral type: F4V|Companion spectral type: M8V
+3588|2.127|0.015|104.385|0.097|Kcont|7.8|0.165|Primary spectral type: F4V|Companion spectral type: M8V
+ERROR on line 5: could not convert string to float: 'X'
