@@ -1,0 +1,3 @@
+target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
+7011|2.127|0.015|255.615|0.097|Hcont|7.8|0.165|Primary spectral type: G8V|Companion spectral type: L1V
+7013|1.478|0.011|121.369|0.139|Hcont|5.883|0.143|Primary spectral type: G9V|Companion spectral type: M6V
