@@ -1,9 +1,4 @@
-Full, correct entry
+Full, correct entry with mirrored request
 Input of target ID with no matchy entry in ExoFOP
-Incorrect date format—-month should be entered '01' instead of '1'
-Incorrect date format--date must have hyphens
-Incorrect date format--attempted use of MM-DD-YYYY format
-Missing observation date, with blank field--acceptable
-Missing obervation date, with blank field, and 8-digit data tag--acceptable, data tag is NOT interpreted as date
-Invalid calendar date--January 44th does not exist
+Full, correct entry with un-mirrored request
 Attempted input of unsupported filter--Mamajek table doesn't support "X" filter

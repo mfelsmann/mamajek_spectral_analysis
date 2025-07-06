@@ -1,9 +1,5 @@
-3588|2.127|0.015|255.615|0.097|Kcont||||7.8|0.165|2019-01-25|442315|tfopwg|0|Primary spectral type: F4V; companion spectral type: M8V
+target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
+3588|2.127|0.015|255.615|0.097|Kcont|7.8|0.165|F4V|M8V
 ERROR on line 2: No matching target entry found in database
-ERROR on line 3: Invalid date format for observation date '2019-1-25'. Expected format: YYYY-MM-DD
-ERROR on line 4: Invalid date format for observation date '20190125'. Expected format: YYYY-MM-DD
-ERROR on line 5: Invalid date format for observation date '01-25-2019'. Expected format: YYYY-MM-DD
-3588|2.127|0.015|255.615|0.097|Kcont||||7.8|0.165||442315|tfopwg|0|Primary spectral type: F4V; companion spectral type: M8V
-3588|2.127|0.015|255.615|0.097|Kcont||||7.8|0.165||12345678|tfopwg|0|Primary spectral type: F4V; companion spectral type: M8V
-ERROR on line 8: Invalid calendar date: '2025-01-44'
-ERROR on line 9: Attempted to reference unsupported magnitude 'X' - could not run analysis
+3588|2.127|0.015|104.385|0.097|Kcont|7.8|0.165|F4V|M8V
+ERROR on line 4: Attempted to reference unsupported magnitude 'X' - could not run analysis
