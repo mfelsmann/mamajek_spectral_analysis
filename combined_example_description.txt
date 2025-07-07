@@ -1,4 +1,5 @@
-Full, correct entry with mirrored request
-Input of target ID with no matchy entry in ExoFOP
-Full, correct entry with un-mirrored request
+Full, correct entry with xflip request
+Full, correct entry with noxflip request
+Input of target ID with no matching entry in ExoFOP
 Attempted input of unsupported filter--Mamajek table doesn't support "X" filter
+Incorrect number of parameters--expected 14, received 12

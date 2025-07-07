@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import argparse
-from dl_exo import dl_exo
+from dl_exo import dl_exofop
 import os
 
 def load_exo_df_from_file(path='exofop.csv'):
@@ -10,7 +10,7 @@ def load_exo_df_from_file(path='exofop.csv'):
 def get_teff_file(id_tag, exo_df=None, path='exofop.csv'):
     if exo_df is None:
         if not os.path.exists(path):
-            dl_exo(path)  # download the file
+            dl_exofop(path)  # download the file
         exo_df = load_exo_df_from_file(path)
     tag_length = len(str(int(id_tag)))
     if tag_length <= 5:
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("output_file", help="Path to input file with parameters")
     args = parser.parse_args()
     if not os.path.exists("exofop.csv"):
-        dl_exo(save_path="exofop.csv")
+        dl_exofop(save_path="exofop.csv")
     exo_df = load_exo_df_from_file()
     teff_file(args.input_file, args.output_file, exo_df)
 

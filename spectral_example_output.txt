@@ -1,4 +1,4 @@
 primary_spt|primary_spt_lower|primary_spt_upper|primary_mag|primary_mag_lower|primary_mag_upper|comp_spt|comp_spt_lower|comp_spt_upper|comp_mag|comp_mag_lower|comp_mag_upper
 F7V|F8V|F6V|2.639|2.821|2.557|M6V|M6.5V|M6V|9.572|9.86|9.572
-ERROR on line 2: Attempted to reference unsupported magnitude 'X' - could not run analysis - spectral file
+ERROR on line 2: Attempted to reference unsupported filter 'X' - could not run analysis - spectral file
 K2V|K2V|K1V|3.938|3.938|3.889|M1V|M1V|M1V|5.64|5.64|5.64

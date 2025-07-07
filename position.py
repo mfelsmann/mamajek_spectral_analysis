@@ -9,9 +9,9 @@ class CustomArgumentParser(argparse.ArgumentParser):
         sys.exit(2)
 
 def position(pixscale, flip, p_x, p_y, c_x, c_y):
-    if flip == "mirror":
+    if flip == "xflip":
         multiplier = -1
-    elif flip == "keep":
+    elif flip == "noxflip":
         multiplier = 1
     sep_delta_x = abs(p_x - c_x)
     sep_delta_y = abs(p_y - c_y)

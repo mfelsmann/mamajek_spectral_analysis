@@ -2,9 +2,9 @@ import argparse
 from position import position
 from magnitude import magnitude
 from spectral import spectral_type, load_mamajek_from_file
-from dl_mamajek import dl_mamajek
+from dl_mamajek import dl_mamajek_table
 from teff import get_teff, load_exo_df_from_file
-from dl_exo import dl_exo
+from dl_exo import dl_exofop
 import os
 import re
 from datetime import datetime
@@ -16,7 +16,8 @@ from datetime import datetime
 #         msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
 #         raise argparse.ArgumentTypeError(msg)
 
-def all(id_tag, pixscale, flip, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, exo_df=None, mamajek_df=None):
+def all_file(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, xflip, dl_exo, dl_mamajek, exo_df=None, mamajek_df=None):
+    
     # obs_date = obs_date.strip()
     # if obs_date:
     #     # Enforce strict YYYY-MM-DD format using regex
@@ -31,11 +32,19 @@ def all(id_tag, pixscale, flip, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag,
 
     # sep, sep_unc, pa, pa_unc = position(p_x, p_y, c_x, c_y)
     # return (sep, sep_unc, pa, pa_unc)
-    if exo_df is None:
-        from teff import load_exo_df_from_file
+    if dl_exo == "yes":
+        dl_exofop('exofop.csv')
+    elif dl_exo in ["", "no"]:
         exo_df = load_exo_df_from_file()
+    if exo_df is None:
+       exo_df = load_exo_df_from_file()
+        
+    
+    if dl_mamajek == "yes":
+        dl_mamajek_table('mamajek.csv')
+    elif dl_mamajek in ["", "no"]:
+        mamajek_df = load_mamajek_from_file()
     if mamajek_df is None:
-        from spectral import load_mamajek_from_file
         mamajek_df = load_mamajek_from_file()
 
     if filter in ["K", "Ks", "Kcont", "Brgamma"]:
@@ -46,9 +55,9 @@ def all(id_tag, pixscale, flip, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag,
         filter_output = f"M_{filter}"
 
     if filter_output not in mamajek_df.columns:
-        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        raise ValueError(f"Attempted to reference unsupported filter '{filter}' - could not run analysis")
         
-    pos_data = position(pixscale, flip, p_x, p_y, c_x, c_y)
+    pos_data = position(pixscale, xflip, p_x, p_y, c_x, c_y)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)
     spt_data = spectral_type(temp_data['teff'], temp_data['unc'], filter, mag_data['d_mag'], mag_data['dm_unc'], mamajek_df)
@@ -73,7 +82,7 @@ def all(id_tag, pixscale, flip, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag,
         'c_spt': spt_data["comp_spt"]
     }
 
-def all_file(input_file, output_file, mamajek_df=None, exo_df=None, tag_df=None):
+def mamajek_table_lookupfile(input_file, output_file, mamajek_df=None, exo_df=None):
     if mamajek_df is None:
         from spectral import load_mamajek_from_file
         mamajek_df = load_mamajek_from_file()
@@ -97,25 +106,33 @@ def all_file(input_file, output_file, mamajek_df=None, exo_df=None, tag_df=None)
         outfile.write('|'.join(headers) + '\n')
         for line_number, line in enumerate(infile, start=1):
             parts = line.strip().split(',')
+            param_count = len(parts)
+            if param_count != 14:
+                id_tag = parts[0]
+                error_msg = (
+                    f"{id_tag}|ERROR on line {line_number}: Incorrect number of parameters"
+                )
+                outfile.write(error_msg + '\n')
+                continue
 
             try:
                 id_tag = parts[0]
                 pixscale = float(parts[1])
-                flip = parts[2]
-                p_x = float(parts[3])
-                p_y = float(parts[4])
-                c_x = float(parts[5])
-                c_y = float(parts[6])
-                filter = parts[7]
-                p_mag = float(parts[8])
-                p_unc = float(parts[9])
-                c_mag = float(parts[10])
-                c_unc = float(parts[11])
-                # obs_date = parts[11]
-                # data_tag = parts[12]
+                p_x = float(parts[2])
+                p_y = float(parts[3])
+                c_x = float(parts[4])
+                c_y = float(parts[5])
+                filter = parts[6]
+                p_mag = float(parts[7])
+                p_unc = float(parts[8])
+                c_mag = float(parts[9])
+                c_unc = float(parts[10])
+                xflip = parts[11]
+                dl_exo = parts[12]
+                dl_mamajek = parts[13]
 
-                result = all(id_tag, pixscale, flip, p_x, p_y, c_x, c_y, filter,
-                             p_mag, p_unc, c_mag, c_unc,
+                result = all_file(id_tag, pixscale, p_x, p_y, c_x, c_y, filter,
+                             p_mag, p_unc, c_mag, c_unc, xflip, dl_exo, dl_mamajek,
                              exo_df=exo_df, mamajek_df=mamajek_df)
 
                 result['p_spt'] = f"{result['p_spt']}"
@@ -126,7 +143,7 @@ def all_file(input_file, output_file, mamajek_df=None, exo_df=None, tag_df=None)
                     'd_mag', 'd_mag_unc', 'p_spt', 'c_spt'
                 ])
             except Exception as e:
-                output_line = f"ERROR on line {line_number}: {e}"
+                output_line = f"{id_tag}|ERROR on line {line_number}: {e}"
 
             outfile.write(output_line + '\n')
 
@@ -137,8 +154,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run position, magnitude, and spectral type calculations.")
     parser.add_argument("input_file", help="Path to input file with parameters")
     parser.add_argument("output_file", help="Path to output file to save results")
-
-    parser.add_argument("args", nargs='*', help="Manual input mode: id_tag pixscale p_x p_y c_x c_y filter p_mag pm_unc c_mag cm_unc")
 
     args = parser.parse_args()
 
@@ -152,5 +167,5 @@ if __name__ == "__main__":
     mamajek_df = load_mamajek_from_file()
     exo_df = load_exo_df_from_file()
 
-    all_file(args.input_file, args.output_file, mamajek_df, exo_df)
+    mamajek_table_lookupfile(args.input_file, args.output_file, mamajek_df, exo_df)
 

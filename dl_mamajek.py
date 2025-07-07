@@ -3,7 +3,7 @@ import numpy as np
 from astropy.io import ascii
 import requests
 
-def dl_mamajek(save_path="mamajek.csv"):
+def dl_mamajek_table(save_path="mamajek.csv"):
     mamajek_url = 'https://raw.githubusercontent.com/emamajek/SpectralType/refs/heads/master/EEM_dwarf_UBVIJHK_colors_Teff.txt'
     mamajek_response = requests.get(mamajek_url)
     lines = mamajek_response.text.splitlines()
@@ -53,7 +53,7 @@ def dl_mamajek(save_path="mamajek.csv"):
     mamajek_df.to_csv(save_path, index=False)
 
 if __name__ == "__main__":
-    dl_mamajek()
+    dl_mamajek_table()
 
 
 ## To run script: python dl_mamajek.py
