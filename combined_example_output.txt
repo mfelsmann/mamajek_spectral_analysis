@@ -1,5 +1,6 @@
 target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
-3588|2.127|0.015|255.615|0.097|Kcont|7.8|0.165|F4V|M8V
-ERROR on line 2: No matching target entry found in database
-3588|2.127|0.015|104.385|0.097|Kcont|7.8|0.165|F4V|M8V
-ERROR on line 4: Attempted to reference unsupported magnitude 'X' - could not run analysis
+7011|2.127|0.015|255.615|0.097|Hcont|7.8|0.165|G8V|L1V
+7013|1.478|0.011|121.369|0.139|Hcont|5.883|0.143|G9V|M6V
+35887|ERROR on line 3: No matching target entry found in database
+5689|ERROR on line 4: Attempted to reference unsupported filter 'X' - could not run analysis
+5806|ERROR on line 5: Incorrect number of parameters

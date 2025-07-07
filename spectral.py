@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import argparse
 import os
-from dl_mamajek import dl_mamajek
+from dl_mamajek import dl_mamajek_table
 
 def load_mamajek_from_file(path='mamajek.csv'):
     return pd.read_csv(path)
@@ -10,7 +10,7 @@ def load_mamajek_from_file(path='mamajek.csv'):
 def spectral_type(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, path='mamajek.csv'):
     if mamajek_df is None:
         if not os.path.exists(path):
-            dl_mamajek(path)  # download the file
+            dl_mamajek_table(path)  # download the file
         mamajek_df = load_mamajek_from_file(path)
     teff = float(teff)
     teff_unc = float(teff_unc)
@@ -29,7 +29,7 @@ def spectral_type(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, path='
         
     if filter_output not in mamajek_df.columns:
         # return f"ERROR: attempted to reference unsupported magnitude '{filter}' - could not run analysis"
-        raise ValueError(f"Attempted to reference unsupported magnitude '{filter}' - could not run analysis")
+        raise ValueError(f"Attempted to reference unsupported filter '{filter}' - could not run analysis")
     
     
     primary_spt = mamajek_df.loc[teff_index, 'SpT']

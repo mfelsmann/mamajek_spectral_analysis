@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 import os
-from dl_exo import dl_exo
+from dl_exo import dl_exofop
 
 def load_exo_df_from_file(path='exofop.csv'):
     return pd.read_csv(path)
@@ -10,7 +10,7 @@ def load_exo_df_from_file(path='exofop.csv'):
 def get_teff(id_tag, exo_df=None, path='exofop.csv'):
     if exo_df is None:
         if not os.path.exists(path):
-            dl_exo(path)  # download the file
+            dl_exofop(path)  # download the file
         exo_df = load_exo_df_from_file(path)
     tag_length = len(str(int(id_tag)))
     if tag_length <= 5:
