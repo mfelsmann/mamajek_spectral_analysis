@@ -10,6 +10,8 @@ import re
 
 
 def mamajek_table_lookup(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, xflip, dl_exo="no", dl_mamajek="no", exo_df=None, mamajek_df=None):
+    dl_exo = dl_exo.strip('"')
+    dl_mamajek = dl_mamajek.strip('"')
     
     if exo_df is None:
         if dl_exo == "yes":
@@ -17,12 +19,17 @@ def mamajek_table_lookup(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_
             exo_df = load_exo_df_from_file()
         elif dl_exo in ["", "no"]:
             exo_df = load_exo_df_from_file()
+        else:
+            raise ValueError(f"ERROR: Unrecognized dl_exo flag '{dl_exo}' - expected 'yes', 'no', '', or blank")
+    
     if mamajek_df is None:
         if dl_mamajek == "yes":
             dl_mamajek_table('mamajek.csv')
             mamajek_df = load_mamajek_from_file()
         elif dl_mamajek in ["", "no"]:
             mamajek_df = load_mamajek_from_file()
+        else:
+            raise ValueError(f"ERROR: Unrecognized dl_exo flag '{dl_exo}' - expected 'yes', 'no', '', or blank")
         
         
     if filter in ["K", "Ks", "Kcont", "Brgamma"]:
@@ -33,7 +40,7 @@ def mamajek_table_lookup(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_
         filter_output = f"M_{filter}"
 
         
-    pos_data = position(pixscale, xflip, p_x, p_y, c_x, c_y)
+    pos_data = position(pixscale, p_x, p_y, c_x, c_y, xflip)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)
   
@@ -48,19 +55,10 @@ def mamajek_table_lookup(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_
         'position_angle': pos_data["position_angle"], 
         'pa_uncertainty': pos_data["pa_uncertainty"],
         'filter_name': filter,
-        # 'filtercent': '',
-        # 'filterwidth': '',
-        # 'finterunits': '',
         'delta_magnitude': mag_data["d_mag"],
         'd_mag_uncertainty': mag_data["dm_unc"],
-        # 'group': f"tfopwg",
-        # 'prop_period': 0,
         'primary_spt': spt_data["primary_spt"],
         'companion_spt': spt_data["comp_spt"],
-        # 'teff': temp_data["teff"],
-        # 'teff_uncertainty': temp_data["unc"],
-        # 'obsdate': obs_date if isinstance(obs_date, str) else (obs_date.isoformat() if obs_date else None),
-        # 'tag': data_tag,
     }
 
 if __name__ == "__main__":
@@ -86,7 +84,7 @@ if __name__ == "__main__":
     parser.add_argument("--dl_mamajek", choices=["yes", "no", ""], default="no", help="Whether to re-download the Mamajek CSV.")
     
     
-        
+    
     parser.add_argument("--mamajek_csv", default="mamajek.csv")
     parser.add_argument("--exo_csv", default="exofop.csv")
     args = parser.parse_args()
@@ -98,8 +96,6 @@ if __name__ == "__main__":
 
     mamajek_df = load_mamajek_from_file(args.mamajek_csv)
     exo_df = load_exo_df_from_file(args.exo_csv)
-
-    # obs_date, data_tag = parse_obs_date_and_data_tag(args.obs_date, args.data_tag)
 
     result = mamajek_table_lookup(args.id_tag, args.pixscale, args.p_x, args.p_y, args.c_x, args.c_y,
                  args.filter, args.p_mag, args.pm_unc, args.c_mag, args.cm_unc, args.xflip, args.dl_exo, args.dl_mamajek, exo_df, mamajek_df)

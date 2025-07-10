@@ -1,0 +1,2 @@
+target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
+1234|ERROR on line 1: unsupported operand type(s) for -: 'str' and 'float'

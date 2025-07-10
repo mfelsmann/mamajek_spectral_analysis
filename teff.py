@@ -10,8 +10,8 @@ def load_exo_df_from_file(path='exofop.csv'):
 def get_teff(id_tag, exo_df=None, path='exofop.csv'):
     if exo_df is None:
         if not os.path.exists(path):
-            dl_exofop(path)  # download the file
-        exo_df = load_exo_df_from_file(path)
+            dl_exofop(path)  # Import, download, format, and save the ExoFOP database
+        exo_df = load_exo_df_from_file(path) # Load local copy of ExoFOP database to pandas DataFrame
     tag_length = len(str(int(id_tag)))
     if tag_length <= 5:
         toi_formatted = f"{int(id_tag)}.01"
@@ -25,8 +25,10 @@ def get_teff(id_tag, exo_df=None, path='exofop.csv'):
         if index.empty: 
             raise ValueError(f"No matching target entry found in database")
 
-    index_value = index[0]
+    index_value = index[0] # First instance of match
     teff = exo_df.loc[index_value, 'Stellar Eff Temp (K)']
+    if not pd.notna(teff) or teff == '':
+        raise ValueError(f"Target has no temperature entry in database")
     teff_unc_raw = exo_df.loc[index_value, 'Stellar Eff Temp (K) err']
     teff_unc = teff_unc_raw if pd.notna(teff_unc_raw) and teff_unc_raw != '' else 0
 
