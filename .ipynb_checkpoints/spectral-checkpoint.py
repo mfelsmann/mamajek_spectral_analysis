@@ -4,6 +4,10 @@ import argparse
 import os
 from dl_mamajek import dl_mamajek_table
 
+class ArgumentParser(argparse.ArgumentParser): # Creates subclass of argparse.ArgumentParser
+    def error(self, message): # Define function "error" with two input parameters
+        self.exit(2, 'ERROR: %s\n' % (message)) # Exit and print message (2 = CL syntax error)
+
 def load_mamajek_from_file(path='mamajek.csv'):
     return pd.read_csv(path)
 
@@ -29,7 +33,7 @@ def spectral_type(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, path='
         
     if filter_output not in mamajek_df.columns:
         # return f"ERROR: attempted to reference unsupported magnitude '{filter}' - could not run analysis"
-        raise ValueError(f"Attempted to reference unsupported filter '{filter}' - could not run analysis")
+        raise ValueError(f"ERROR: Attempted to reference unsupported filter '{filter}' - could not run analysis")
     
     
     primary_spt = mamajek_df.loc[teff_index, 'SpT']
@@ -73,16 +77,20 @@ def spectral_type(teff, teff_unc, filter, d_mag, dm_unc, mamajek_df=None, path='
     }
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("teff", type=float)
-    parser.add_argument("teff_unc", type=float)
-    parser.add_argument("filter", type=str)
-    parser.add_argument("d_mag", type=float)
-    parser.add_argument("dm_unc", type=float)
+    parser = ArgumentParser()
+    parser.add_argument("teff", type=float, help="Effective temperature of stellar object")
+    parser.add_argument("teff_unc", type=float, help="Effective temperature uncertainty")
+    parser.add_argument("filter", type=str, help="Which filter the magnitude measurements were taken in")
+    parser.add_argument("d_mag", type=float, help="Brightness difference between primary and companion star")
+    parser.add_argument("dm_unc", type=float, help="Brightness difference uncertainty")
     args = parser.parse_args()
     # mamajek_df = load_mamajek_from_file()
-    result = spectral_type(args.teff, args.teff_unc, args.filter, args.d_mag, args.dm_unc)
-    print(result)
+    try:
+        result = spectral_type(args.teff, args.teff_unc, args.filter, args.d_mag, args.dm_unc)
+        print(result)
+    except Exception as e:
+        print(e)
+        exit(2)
 
 
 ## To run script: python spectral.py teff_num teff_unc_num filter_name d_mag_num d_mag_unc_num

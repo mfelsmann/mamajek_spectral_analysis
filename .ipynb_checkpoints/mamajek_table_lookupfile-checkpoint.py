@@ -6,44 +6,29 @@ from dl_mamajek import dl_mamajek_table
 from teff import get_teff, load_exo_df_from_file
 from dl_exo import dl_exofop
 import os
-import re
-from datetime import datetime
-
-# def valid_date_file(s):
-#     try:
-#         return datetime.strptime(s, "%Y-%m-%d").date()
-#     except ValueError:
-#         msg = f"Not a valid date: '{s}'. Expected format: YYYY-MM-DD"
-#         raise argparse.ArgumentTypeError(msg)
 
 def all_file(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, c_unc, xflip, dl_exo, dl_mamajek, exo_df=None, mamajek_df=None):
+    dl_exo = dl_exo.strip('"')
+    dl_mamajek = dl_mamajek.strip('"')
+ 
     
-    # obs_date = obs_date.strip()
-    # if obs_date:
-    #     # Enforce strict YYYY-MM-DD format using regex
-    #     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", obs_date):
-    #         raise ValueError(f"Invalid date format for observation date '{obs_date}'. Expected format: YYYY-MM-DD")
-
-    #     # Then validate it is a real calendar date
-    #     try:
-    #         datetime.strptime(obs_date, "%Y-%m-%d")
-    #     except ValueError:
-    #         raise ValueError(f"Invalid calendar date: '{obs_date}'")
-
-    # sep, sep_unc, pa, pa_unc = position(p_x, p_y, c_x, c_y)
-    # return (sep, sep_unc, pa, pa_unc)
     if dl_exo == "yes":
         dl_exofop('exofop.csv')
     elif dl_exo in ["", "no"]:
         exo_df = load_exo_df_from_file()
+    else:
+        raise ValueError(f"Invalid download flag '{dl_exo}' - expected 'yes', 'no', or ''")
+
     if exo_df is None:
-       exo_df = load_exo_df_from_file()
-        
-    
+        exo_df = load_exo_df_from_file()
+
     if dl_mamajek == "yes":
         dl_mamajek_table('mamajek.csv')
     elif dl_mamajek in ["", "no"]:
         mamajek_df = load_mamajek_from_file()
+    else:
+        raise ValueError(f"Invalid download flag '{dl_mamajek}' - expected 'yes', 'no', or ''")
+    
     if mamajek_df is None:
         mamajek_df = load_mamajek_from_file()
 
@@ -57,7 +42,7 @@ def all_file(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, 
     if filter_output not in mamajek_df.columns:
         raise ValueError(f"Attempted to reference unsupported filter '{filter}' - could not run analysis")
         
-    pos_data = position(pixscale, xflip, p_x, p_y, c_x, c_y)
+    pos_data = position(pixscale, p_x, p_y, c_x, c_y, xflip)
     mag_data = magnitude(p_mag, p_unc, c_mag, c_unc)
     temp_data = get_teff(id_tag, exo_df)
     spt_data = spectral_type(temp_data['teff'], temp_data['unc'], filter, mag_data['d_mag'], mag_data['dm_unc'], mamajek_df)
@@ -69,15 +54,8 @@ def all_file(id_tag, pixscale, p_x, p_y, c_x, c_y, filter, p_mag, p_unc, c_mag, 
         'pa': pos_data["position_angle"], 
         'pa_unc': pos_data["pa_uncertainty"],
         'filter_name': filter,
-        # 'filtercent': '',
-        # 'filterwidth': '',
-        # 'finterunits': '',
         'd_mag': mag_data["d_mag"],
         'd_mag_unc': mag_data["dm_unc"],
-        # 'obsdate': obs_date,
-        # 'tag': data_tag,
-        # 'group': f"tfopwg",
-        # 'prop_period': 0,
         'p_spt': spt_data["primary_spt"],
         'c_spt': spt_data["comp_spt"]
     }
@@ -143,7 +121,7 @@ def mamajek_table_lookupfile(input_file, output_file, mamajek_df=None, exo_df=No
                     'd_mag', 'd_mag_unc', 'p_spt', 'c_spt'
                 ])
             except Exception as e:
-                output_line = f"{id_tag}|ERROR on line {line_number}: {e}"
+                output_line = f"ERROR on line {line_number}: {e}"
 
             outfile.write(output_line + '\n')
 
