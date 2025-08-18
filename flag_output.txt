@@ -1,2 +1,0 @@
-target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
-ERROR on line 1: Invalid download flag 'xxx' - expected 'yes', 'no', or ''.

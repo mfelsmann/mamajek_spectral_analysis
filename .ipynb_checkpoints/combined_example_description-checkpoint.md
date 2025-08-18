@@ -1,0 +1,7 @@
+### Reference for combined_example.txt
+
+Full, correct entry with xflip request \
+Full, correct entry with noxflip request \
+Input of target ID with no matching entry in ExoFOP \
+Attempted input of unsupported filter--Mamajek table doesn't support "X" filter \
+Incorrect number of parameters--expected 14, received 12

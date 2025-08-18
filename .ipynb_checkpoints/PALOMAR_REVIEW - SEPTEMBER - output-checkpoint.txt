@@ -1,0 +1,10 @@
+target|separation|separation_uncertainty|position_angle|pa_uncertainty|filter_name|delta_magnitude|dm_uncertainty|primary_spt|companion_spt
+6033|2.905|0.021|20.527|0.071|Kcont|6.206|0.043|F6V|M5.5V
+6195|4.108|0.03|152.769|0.05|Hcont|4.031|0.015|F6V|M2.5V
+6195|4.312|0.031|154.567|0.048|Hcont|4.025|0.015|F6V|M2.5V
+6195|4.096|0.029|152.847|0.05|Kcont|3.787|0.014|F6V|M2.5V
+6195|4.291|0.031|154.588|0.048|Kcont|3.749|0.014|F6V|M2.5V
+6913|1.301|0.009|88.21|0.158|Hcont|4.229|0.015|F2V|M2.5V
+6913|2.331|0.017|266.377|0.088|Hcont|6.064|0.031|F2V|M4.5V
+6913|1.301|0.009|87.875|0.158|Kcont|4.037|0.015|F2V|M2.5V
+6913|2.331|0.017|266.377|0.088|Kcont|6.092|0.032|F2V|M5V
