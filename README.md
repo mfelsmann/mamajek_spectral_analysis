@@ -17,6 +17,7 @@ This program is a complementary tool to Eric Mamajek's "[A Modern Mean Dwarf Ste
 - `mamajek_table_lookupfile.py` - Python file for running full stellar analysis on primary-companion pairs—intended for use on a file of multiple sets
 - `mamajek.csv` - pre-loaded Mamajek table—re-download as needed
 - `position.py` - Python file for calculating separation and position angle between a primary and companion star
+- `README.md` - this file
 - `spectral_example_output.txt` - the output file created by running `spectral_file.py` on `spectral_example.txt`
 - `spectral_example.txt` - example input file for running `spectral_file.py`
 - `spectral_file.py` - Python file for calculating the respective spectral types of primary-companion pairs—intended for use on a file of multiple sets
@@ -25,3 +26,8 @@ This program is a complementary tool to Eric Mamajek's "[A Modern Mean Dwarf Ste
 - `teff_example.txt` - example input file for running `teff_file.py`
 - `teff_file.py` - Python file for retrieving the effective temperature of a primary star—intended for use on a file of multiple stars
 - `teff.py` - Python file for retrieving the effective temperature of a primary star—intended for use on a single star
+
+## Recent Changes
+
+- `teff.py` and `teff_file.py` edited to support greater range of TIC candidates by pulling from MAST catalog using `astroquery`
+- `combined_example_description` changed from `.txt` to `.md` file format
