@@ -3,3 +3,4 @@ effective_temperature|teff_uncertainty
 ERROR on line 2: No matching target entry found in database
 7019.0|133.6
 5955.0|133.0
+5489.83|119.282

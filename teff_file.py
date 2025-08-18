@@ -18,16 +18,34 @@ def get_teff_file(id_tag, exo_df=None, path='exofop.csv'):
         index = exo_df[exo_df.iloc[:, 1] == float(toi_formatted)].index
         if index.empty:
             raise ValueError(f"No matching target entry found in database")
+        index_value = index[0]
+        teff = exo_df.loc[index_value, 'Stellar Eff Temp (K)']
+        if not pd.notna(teff) or teff == '':
+            raise ValueError(f"Target has no temperature entry in database")
+        teff_unc_raw = exo_df.loc[index_value, 'Stellar Eff Temp (K) err']
+        teff_unc = teff_unc_raw if pd.notna(teff_unc_raw) and teff_unc_raw != '' else 0
     else:
         tic = f"{int(id_tag)}"
         index = exo_df[exo_df.iloc[:, 0] == float(tic)].index
         if index.empty:
-            raise ValueError(f"No matching target entry found in database")
-            
-    index_value = index[0]
-    teff = exo_df.loc[index_value, 'Stellar Eff Temp (K)']
-    teff_unc_raw = exo_df.loc[index_value, 'Stellar Eff Temp (K) err']
-    teff_unc = teff_unc_raw if pd.notna(teff_unc_raw) and teff_unc_raw != '' else 0
+            from astroquery.exceptions import ResolverError
+            from astroquery.mast import Catalogs
+            target_name = f"TIC {tic}"
+            try:
+                catalogTIC = Catalogs.query_object(target_name, radius=0.002, catalog="TIC")
+            except ResolverError:
+                raise ValueError(f"No matching entry found in database")
+            filtered = catalogTIC[catalogTIC['ID'] == f'{tic}']
+            teff = filtered['Teff'][0]
+            teff_unc_raw = filtered['e_Teff'][0]
+            teff_unc = teff_unc_raw if pd.notna(teff_unc_raw) and teff_unc_raw != '' else 0
+        else:
+            index_value = index[0] # First instance of match
+            teff = exo_df.loc[index_value, 'Stellar Eff Temp (K)']
+            if not pd.notna(teff) or teff == '':
+                raise ValueError(f"Target has no temperature entry in database")
+            teff_unc_raw = exo_df.loc[index_value, 'Stellar Eff Temp (K) err']
+            teff_unc = teff_unc_raw if pd.notna(teff_unc_raw) and teff_unc_raw != '' else 0
 
     return {"teff": teff, 
             "teff_unc": teff_unc
