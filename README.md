@@ -1,6 +1,10 @@
-# A Python Program for Spectral Type Analysis
+# MSTAT: A Python Program for Spectral Type Analysis
 
-This program is a complementary tool to Eric Mamajek's "[A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence](https://github.com/emamajek/SpectralType/blob/master/EEM_dwarf_UBVIJHK_colors_Teff.txt)" table. Given a few basic parameters such as target ID and magnitude, this program will produce an overview of the spectral types of a primary and companion star set.
+MSTAT (Mamajek STellar Analysis Tool) is a complementary tool to Eric Mamajek's
+"[A Modern Mean Dwarf Stellar Color and Effective Temperature Sequence](https://github.com/emamajek/SpectralType/blob/master/EEM_dwarf_UBVIJHK_colors_Teff.txt)"
+table.
+Given a few basic parameters such as target ID and magnitude,
+this program will produce an overview of the spectral types of a primary and companion star set.
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16938976.svg)](https://doi.org/10.5281/zenodo.16938976)
 
